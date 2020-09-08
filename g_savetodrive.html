@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Save to Drive Demo: Explicit Render</title>
+    <link rel="canonical" href="http://www.example.com">
+    <script>
+        window.___gcfg = {
+            parsetags: 'explicit'
+        };
+
+        var QStr = function(){
+            this.d = {};
+            this.parse();
+        };
+
+        QStr.prototype.parse = function(){
+            this.d = {};
+            var items = location.search.substr(1).split('&');
+            for(var i = 0; i < items.length; i++){
+                var pair = items[i].split('=');
+                this.d[pair[0]] = decodeURIComponent(pair[1]);
+            }
+        };
+
+        QStr.prototype.get = function(k){
+            return this.d[k];
+        };
+        // console.log(new QStr().get('user'));
+    </script>
+    <script src="https://apis.google.com/js/platform.js"></script>
+  </head>
+  <body>
+        <div id="myurl"></div>
+        <div id="mynm"></div>
+        <div id="savetodrive-div"></div>
+    <script>
+        const qs = new QStr();
+        const gs = document.querySelector('.g-savetodrive');
+        const url = qs.get('url');
+        console.log(url);
+        if(url){
+            document.getElementById('myurl').innerText = url;
+        }
+        const nm = qs.get('nm');
+        if(nm){
+            document.getElementById('mynm').innerText = nm;
+        }
+        console.log(nm);
+
+        if(url && nm){
+            gapi.savetodrive.render('savetodrive-div', {
+                src: url,
+                filename: nm,
+                sitename: 'My Company Name'
+            });
+        }
+    </script>
+  </body>
+</html>
